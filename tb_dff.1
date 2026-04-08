@@ -1,0 +1,33 @@
+`timescale 1ns/1ps
+
+module tb_dff;
+
+reg clk;
+reg d;
+wire q;
+
+dff dut (
+    .clk(clk),
+    .d(d),
+    .q(q)
+);
+
+// Clock generation: 10ns period
+always begin
+    clk = 0; #5;
+    clk = 1; #5;
+end
+
+initial begin
+    $display("Time | clk d | q");
+    $monitor("%4t |  %b   %b | %b", $time, clk, d, q);
+
+    d = 0; #12;   // q should capture 0 at next posedge
+    d = 1; #10;   // q should capture 1 at next posedge
+    d = 0; #10;   // q should capture 0 at next posedge
+    d = 1; #10;   // q should capture 1 at next posedge
+
+    $finish;
+end
+
+endmodule
